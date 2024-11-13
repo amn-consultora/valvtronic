@@ -1,0 +1,31 @@
+/* Mask component */
+
+.main{
+    margin-bottom: 50px;
+  }
+  
+  .container{
+    position: relative;
+    height: 300vh;
+  }
+  
+  .stickyMask{
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    mask-image: url('/assets/logo/bray.svg');
+    mask-position: 53.70% 50%;
+    mask-repeat: no-repeat;
+    mask-size: 50%;
+  }
+  
+  .stickyMask img{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    background: linear-gradient(to bottom, rgba(201, 8, 8, 0.877) 50%, rgba(223, 13, 13, 0.781));
+  }

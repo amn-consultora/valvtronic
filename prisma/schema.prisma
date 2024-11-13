@@ -1,0 +1,161 @@
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// prisma/schema.prisma
+datasource db {
+  provider  = "mongodb"
+  url  	    = env("DATABASE_URL")
+  // uncomment next line if you use Prisma <5.10
+  // directUrl = env("DATABASE_URL_UNPOOLED")
+}
+
+model Account {
+  id                 String  @id @map("_id") @default(cuid())
+  userId             String  @db.ObjectId
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  
+  access_token       String?  
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+enum UserRole {
+  USER
+  ADMIN
+}
+
+model User {
+  id            String    @id @map("_id") @default(auto()) @db.ObjectId
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          UserRole @default(USER)
+  accounts      Account[]
+
+  createdAt     DateTime @default(now())
+}
+
+model Valve {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  slug String
+  description String
+  images String[]
+  status Boolean @default(true)
+  model String @default("valvulas")
+
+  category ValveCategory
+  serie String
+  sizeRange String
+  temperatureRange String
+  operatingPressure String
+  shutterMaterial String
+  closureClassification String
+  bodyType String?
+  connectionRules String
+  certifications String
+  applications String
+  bodyMaterials String
+  stemMaterials String
+  seatMaterials String
+  standardDesign String
+  standardTests String
+
+  createdAt DateTime @default(now())
+}
+
+model Actuator {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  slug String
+  description String
+  images String[]
+  status Boolean @default(true)
+  model String @default("actuadores")
+
+  serie String
+  category ActuatorCategory
+  outputTorque String
+  temperatureRange String
+  pressureRange String
+  mounting String
+  standardDesign String
+  standardTests String
+  aplications String
+  controlOptions String
+  powerSupply String
+  certifications String
+  valveCompatibility String
+  strokeLimit String
+  otherSpec String
+
+  createdAt DateTime @default(now())
+}
+
+model Accesory {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  slug String
+  description String
+  images String[]
+  status Boolean @default(true)
+  model String @default("accesorios")
+
+  category AccesoryCategory
+  serie String
+  feedPressure String
+  inputSignal String
+  connections String
+  mounting String
+  temperatureRange String
+  protectionDegree String
+  intrinsicSafety String
+  applications String
+  certifications String
+  otherSpec String
+
+  createdAt DateTime @default(now())
+}
+
+// type Image {
+//   id Int
+//   color String
+//   colorCode String
+//   image String
+// }
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum ValveCategory {
+  mariposas
+  esfericas
+  retencion
+  guillotina_y_compuertas
+  esclusas
+  aire
+  aplicaciones_especiales
+}
+
+enum ActuatorCategory {
+  manual
+  neumaticos
+  electricos
+  electrohidraulicos
+}
+
+enum AccesoryCategory {
+  neumaticos
+}
